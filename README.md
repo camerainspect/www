@@ -1,3 +1,4 @@
+![logo1](https://github.com/user-attachments/assets/adfebe18-9b44-4d7e-aba2-3e9373b78b6c)
 
 ![favicon.png](favicon.png) [<span style='font-size:20px;'>&#x270D;</span>](git@github.com:multigit-com/python/edit/main/DOCS/HEAD.md)
 
