@@ -1,0 +1,1579 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CameraInspect - Inteligentny Asystent Konfiguracji Systemów Monitoringu</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0056b3;
+            --secondary: #003366;
+            --accent: #00aaff;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --gray: #6c757d;
+            --gray-light: #e9ecef;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: #fff;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--secondary);
+        }
+        
+        p {
+            margin-bottom: 1rem;
+        }
+        
+        a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        a:hover {
+            color: var(--accent);
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--secondary);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background-color: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-lg {
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+        }
+        
+        .text-center {
+            text-align: center;
+        }
+        
+        .section {
+            padding: 5rem 0;
+        }
+        
+        .section-heading {
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+        
+        .section-heading h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .section-heading p {
+            font-size: 1.2rem;
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        /* Header */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo img {
+            height: 50px;
+            margin-right: 10px;
+        }
+        
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .logo-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--secondary);
+        }
+        
+        .logo-slogan {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 2rem;
+        }
+        
+        nav ul li a {
+            font-weight: 600;
+            color: var(--secondary);
+        }
+        
+        nav ul li a:hover {
+            color: var(--accent);
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            font-size: 1.5rem;
+            background: none;
+            border: none;
+            color: var(--secondary);
+            cursor: pointer;
+        }
+        
+        /* Hero */
+        .hero {
+            padding-top: 120px;
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            color: white;
+            padding-bottom: 5rem;
+        }
+        
+        .hero-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 2.5rem;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        /* Features */
+        .features {
+            background-color: var(--light);
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .feature-card {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+        
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        /* How it works */
+        .how-it-works-steps {
+            display: flex;
+            justify-content: space-between;
+            counter-reset: step-counter;
+            position: relative;
+            margin: 3rem 0;
+        }
+        
+        .how-it-works-steps::before {
+            content: '';
+            position: absolute;
+            top: 40px;
+            left: 10%;
+            right: 10%;
+            height: 4px;
+            background-color: var(--primary);
+            z-index: 0;
+        }
+        
+        .step {
+            position: relative;
+            z-index: 1;
+            width: 30%;
+            text-align: center;
+            padding: 0 1rem;
+        }
+        
+        .step-number {
+            width: 80px;
+            height: 80px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0 auto 1.5rem;
+        }
+        
+        .step h3 {
+            margin-bottom: 1rem;
+        }
+        
+        /* Benefits */
+        .benefits {
+            background-color: var(--light);
+        }
+        
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .benefit-card {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .benefit-card h3 {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .benefit-card h3 i {
+            margin-right: 0.5rem;
+            color: var(--primary);
+        }
+        
+        .benefit-stats {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        /* Case Studies */
+        .case-studies-container {
+            display: flex;
+            gap: 2rem;
+            overflow-x: auto;
+            padding: 1rem 0;
+            scroll-snap-type: x mandatory;
+        }
+        
+        .case-study {
+            flex: 0 0 auto;
+            width: 80%;
+            max-width: 500px;
+            padding: 2rem;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            scroll-snap-align: start;
+        }
+        
+        .case-study h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--secondary);
+        }
+        
+        .case-study-section {
+            margin-bottom: 1.5rem;
+        }
+        
+        .case-study-section h4 {
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+        }
+        
+        .case-study-list {
+            list-style: none;
+        }
+        
+        .case-study-list li {
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+        
+        .case-study-list li::before {
+            content: '\f00c';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            position: absolute;
+            left: 0;
+            color: var(--success);
+        }
+        
+        /* Pricing */
+        .pricing {
+            background-color: var(--light);
+        }
+        
+        .pricing-toggle {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 3rem;
+        }
+        
+        .pricing-toggle button {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            background-color: var(--gray-light);
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .pricing-toggle button:first-child {
+            border-radius: 5px 0 0 5px;
+        }
+        
+        .pricing-toggle button:last-child {
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .pricing-toggle button.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .pricing-cards {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+        }
+        
+        .pricing-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 3rem 2rem;
+            width: 100%;
+            max-width: 350px;
+            transition: transform 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .pricing-card.featured {
+            transform: scale(1.05);
+            border: 2px solid var(--primary);
+        }
+        
+        .pricing-card.featured::before {
+            content: 'Polecany';
+            position: absolute;
+            top: 30px;
+            right: -30px;
+            background-color: var(--primary);
+            color: white;
+            padding: 0.5rem 3rem;
+            transform: rotate(45deg);
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .pricing-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .pricing-card.featured:hover {
+            transform: scale(1.05) translateY(-10px);
+        }
+        
+        .pricing-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .pricing-price {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .pricing-price span {
+            font-size: 1rem;
+            color: var(--gray);
+            font-weight: 400;
+        }
+        
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+        
+        .pricing-features li {
+            padding: 0.8rem 0;
+            border-bottom: 1px solid var(--gray-light);
+            position: relative;
+            padding-left: 1.5rem;
+        }
+        
+        .pricing-features li::before {
+            content: '\f00c';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            position: absolute;
+            left: 0;
+            color: var(--success);
+        }
+        
+        .pricing-features li.na::before {
+            content: '\f00d';
+            color: var(--gray);
+        }
+        
+        .pricing-card .btn {
+            width: 100%;
+        }
+        
+        /* ROI Calculator */
+        .roi-calculator {
+            background-color: white;
+        }
+        
+        .calculator-container {
+            background-color: var(--light);
+            padding: 3rem;
+            border-radius: 10px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .calculator-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid var(--gray-light);
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .calculator-results {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+        
+        .calculator-results.active {
+            display: block;
+        }
+        
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--gray-light);
+        }
+        
+        .result-label {
+            font-weight: 600;
+        }
+        
+        .result-value {
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .result-highlight {
+            background-color: var(--primary);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 5px;
+            margin-top: 1rem;
+            text-align: center;
+        }
+        
+        .result-highlight h3 {
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+        
+        .result-highlight p {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0;
+        }
+        
+        /* FAQ */
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .faq-item {
+            margin-bottom: 1rem;
+            border: 1px solid var(--gray-light);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .faq-question {
+            padding: 1.5rem;
+            background-color: white;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+        }
+        
+        .faq-question::after {
+            content: '\f107';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            color: var(--primary);
+        }
+        
+        .faq-question.active::after {
+            content: '\f106';
+        }
+        
+        .faq-answer {
+            padding: 0 1.5rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background-color: var(--light);
+        }
+        
+        .faq-answer.active {
+            padding: 1.5rem;
+            max-height: 500px;
+        }
+        
+        /* Contact */
+        .contact {
+            background-color: var(--light);
+        }
+        
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+        }
+        
+        .contact-info h3 {
+            margin-bottom: 2rem;
+        }
+        
+        .contact-info-item {
+            display: flex;
+            margin-bottom: 1.5rem;
+        }
+        
+        .contact-info-item i {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-right: 1rem;
+        }
+        
+        .contact-form {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .contact-form h3 {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .contact-form textarea {
+            height: 150px;
+            resize: vertical;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--secondary);
+            color: white;
+            padding: 4rem 0 2rem;
+        }
+        
+        .footer-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+        
+        .footer-column h3 {
+            color: white;
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            transition: background-color 0.3s;
+        }
+        
+        .social-links a:hover {
+            background-color: var(--primary);
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .footer-bottom p {
+            margin: 0;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            nav {
+                position: fixed;
+                top: 0;
+                right: -300px;
+                width: 300px;
+                height: 100vh;
+                background-color: white;
+                box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+                transition: right 0.3s;
+                z-index: 1001;
+            }
+            
+            nav.active {
+                right: 0;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                padding: 2rem;
+            }
+            
+            nav ul li {
+                margin: 0 0 1.5rem 0;
+            }
+            
+            .how-it-works-steps {
+                flex-direction: column;
+                align-items: center;
+                gap: 3rem;
+            }
+            
+            .how-it-works-steps::before {
+                display: none;
+            }
+            
+            .step {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .contact-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .calculator-form {
+                grid-template-columns: 1fr;
+            }
+            
+            .case-study {
+                width: 90%;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .feature-card {
+                padding: 1.5rem;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .hero-buttons {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .hero-buttons .btn {
+                width: 100%;
+                margin-bottom: 1rem;
+            }
+            
+            .section-heading h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-video" style="font-size: 2rem; color: var(--primary);"></i>
+                </div>
+                <div class="logo-text">
+                    <div class="logo-name">CameraInspect</div>
+                    <div class="logo-slogan">Humanless Support</div>
+                </div>
+            </div>
+            <button class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+            <nav>
+                <ul>
+                    <li><a href="#features">Funkcje</a></li>
+                    <li><a href="#how-it-works">Jak to działa</a></li>
+                    <li><a href="#benefits">Korzyści</a></li>
+                    <li><a href="#case-studies">Case Studies</a></li>
+                    <li><a href="#pricing">Cennik</a></li>
+                    <li><a href="#contact">Kontakt</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Inteligentny Asystent Konfiguracji Systemów Monitoringu</h1>
+                <p>CameraInspect to zaawansowane narzędzie diagnostyczno-konfiguracyjne, które eliminuje techniczne bariery i umożliwia sprawną instalację i konfigurację systemów kamer nawet niedoświadczonym użytkownikom.</p>
+                <div class="hero-buttons">
+                    <a href="#roi-calculator" class="btn btn-primary btn-lg">Oblicz swoje oszczędności</a>
+                    <a href="#contact" class="btn btn-secondary btn-lg">Umów demonstrację</a>
+                </div>
+            </div>
+            <div class="text-center" style="margin-top: 3rem;">
+                <a href="#pricing" class="btn btn-primary">Zobacz nasze plany</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-column">
+                    <h3>O nas</h3>
+                    <ul class="footer-links">
+                        <li><a href="http://www.camerainspect.com">O firmie</a></li>
+                        <li><a href="http://docs.camerainspect.com">Dokumentacja</a></li>
+                        <li><a href="http://roadmap.camerainspect.com">Roadmapa</a></li>
+                        <li><a href="http://identity.camerainspect.com">Nasza tożsamość</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Wsparcie</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Centrum pomocy</a></li>
+                        <li><a href="#">Baza wiedzy</a></li>
+                        <li><a href="#">Zgłoś problem</a></li>
+                        <li><a href="#">Szkolenia</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Rozwiązania</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Dla sklepów</a></li>
+                        <li><a href="#">Dla hoteli</a></li>
+                        <li><a href="#">Dla firm logistycznych</a></li>
+                        <li><a href="#">Dla biur</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Kontakt</h3>
+                    <ul class="footer-links">
+                        <li><a href="mailto:info@camerainspect.com">info@camerainspect.com</a></li>
+                        <li><a href="tel:+48221234567">+48 22 123 45 67</a></li>
+                    </ul>
+                    <h3 style="margin-top: 2rem;">Śledź nas</h3>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 CameraInspect. Wszelkie prawa zastrzeżone.</p>
+                <p style="margin-top: 0.5rem;">Rozwijane przez <a href="http://softreck.com" target="_blank">Softreck</a> i <a href="http://telemonit.com" target="_blank">TeleMonit</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const nav = document.querySelector('nav');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            nav.classList.toggle('active');
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    window.scrollTo({
+                        top: target.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+                
+                // Close mobile menu if open
+                if (nav.classList.contains('active')) {
+                    nav.classList.remove('active');
+                }
+            });
+        });
+        
+        // Pricing toggle
+        const pricingToggleBtns = document.querySelectorAll('.pricing-toggle button');
+        
+        pricingToggleBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                pricingToggleBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                // Here you would update prices for annual vs monthly
+                // Just a placeholder for actual implementation
+                if (btn.textContent.includes('roczna')) {
+                    // Update to annual prices with discount
+                } else {
+                    // Update to monthly prices
+                }
+            });
+        });
+        
+        // FAQ accordion
+        const faqQuestions = document.querySelectorAll('.faq-question');
+        
+        faqQuestions.forEach(question => {
+            question.addEventListener('click', () => {
+                const answer = question.nextElementSibling;
+                
+                question.classList.toggle('active');
+                
+                if (question.classList.contains('active')) {
+                    answer.classList.add('active');
+                } else {
+                    answer.classList.remove('active');
+                }
+            });
+        });
+        
+        // ROI Calculator
+        const calculateRoiBtn = document.getElementById('calculate-roi');
+        const roiResults = document.getElementById('roi-results');
+        
+        calculateRoiBtn.addEventListener('click', () => {
+            const cameras = parseInt(document.getElementById('cameras').value) || 0;
+            const locations = parseInt(document.getElementById('locations').value) || 0;
+            const maintenance = parseInt(document.getElementById('maintenance').value) || 0;
+            const issues = parseInt(document.getElementById('issues').value) || 0;
+            
+            // Simple ROI calculation (would be more complex in reality)
+            const currentCosts = maintenance * 12 + issues * 500 * 12; // Assuming 500 PLN per issue
+            const newCosts = (maintenance * 0.7 * 12) + (issues * 0.4 * 500 * 12); // 30% maintenance reduction, 60% fewer issues
+            const savings = currentCosts - newCosts;
+            const reducedVisits = 60; // 60% reduction in service visits
+            
+            // Calculate ROI in months
+            let monthlyCost = 0;
+            if (cameras <= 10) {
+                monthlyCost = 599;
+            } else if (cameras <= 50) {
+                monthlyCost = 1499;
+            } else {
+                monthlyCost = 3999;
+            }
+            
+            const annualCost = monthlyCost * 12;
+            const roiMonths = Math.ceil((annualCost / savings) * 12);
+            
+            // Update results
+            document.getElementById('current-costs').textContent = currentCosts.toLocaleString() + ' PLN';
+            document.getElementById('new-costs').textContent = newCosts.toLocaleString() + ' PLN';
+            document.getElementById('savings').textContent = savings.toLocaleString() + ' PLN';
+            document.getElementById('reduced-visits').textContent = reducedVisits + '%';
+            document.getElementById('roi-months').textContent = roiMonths + ' miesięcy';
+            
+            roiResults.classList.add('active');
+        });
+        
+        // Form submission (prevent default)
+        const contactForm = document.getElementById('contact-form');
+        if (contactForm) {
+            contactForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                // Here you would normally handle the form submission via AJAX
+                const nameInput = document.getElementById('name');
+                const emailInput = document.getElementById('email');
+                const messageInput = document.getElementById('message');
+                
+                if (nameInput.value && emailInput.value && messageInput.value) {
+                    alert('Dziękujemy za wiadomość! Odpowiemy najszybciej jak to możliwe.');
+                    contactForm.reset();
+                }
+            });
+        }
+        
+        // Scroll effect for header
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.1)';
+            } else {
+                header.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.1)';
+            }
+        });
+        
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            // Open first FAQ item
+            if (document.querySelector('.faq-question')) {
+                document.querySelector('.faq-question').click();
+            }
+            
+            // Set minimum date for appointments
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            
+            const dateInputs = document.querySelectorAll('input[type="date"]');
+            dateInputs.forEach(input => {
+                input.min = tomorrow.toISOString().split('T')[0];
+            });
+        });
+    </script>
+</body>
+</html>
+
+    <!-- FAQ -->
+    <section id="faq" class="section faq">
+        <div class="container">
+            <div class="section-heading">
+                <h2>Często Zadawane Pytania</h2>
+                <p>Odpowiedzi na najczęściej zadawane pytania o CameraInspect</p>
+            </div>
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question">Czy CameraInspect działa z każdym rodzajem kamer?</div>
+                    <div class="faq-answer">
+                        <p>CameraInspect jest kompatybilny z większością popularnych marek i modeli kamer IP dostępnych na rynku. System został zaprojektowany do pracy z kamerami obsługującymi standardowe protokoły, takie jak ONVIF. W przypadku nietypowych modeli, nasz zespół techniczny może pomóc w integracji i zapewnieniu pełnej kompatybilności.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Jak wygląda proces wdrożenia?</div>
+                    <div class="faq-answer">
+                        <p>Proces wdrożenia CameraInspect jest prosty i składa się z kilku kroków:</p>
+                        <ol>
+                            <li>Analiza potrzeb i istniejącej infrastruktury</li>
+                            <li>Instalacja oprogramowania CameraInspect</li>
+                            <li>Automatyczne skanowanie sieci i wykrywanie urządzeń</li>
+                            <li>Konfiguracja parametrów i optymalizacja</li>
+                            <li>Szkolenie użytkowników (opcjonalne)</li>
+                            <li>Uruchomienie pełnego monitoringu</li>
+                        </ol>
+                        <p>Cały proces trwa zazwyczaj od kilku godzin do kilku dni, w zależności od wielkości systemu.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Czy potrzebuję specjalistycznej wiedzy technicznej, aby korzystać z CameraInspect?</div>
+                    <div class="faq-answer">
+                        <p>Nie, CameraInspect został zaprojektowany z myślą o użytkownikach o różnym poziomie wiedzy technicznej. Interfejs jest intuicyjny, a kreator konfiguracji prowadzi użytkownika krok po kroku przez cały proces. Automatyczna diagnostyka i optymalizacja eliminują potrzebę posiadania specjalistycznej wiedzy. W razie potrzeby, nasz zespół wsparcia technicznego jest zawsze gotowy pomóc.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Czy CameraInspect oferuje integrację z innymi systemami?</div>
+                    <div class="faq-answer">
+                        <p>Tak, CameraInspect oferuje możliwość integracji z wieloma popularnymi systemami, takimi jak:</p>
+                        <ul>
+                            <li>Systemy zarządzania budynkiem (BMS)</li>
+                            <li>Systemy kontroli dostępu</li>
+                            <li>Systemy alarmowe</li>
+                            <li>Oprogramowanie VMS (Video Management Software)</li>
+                            <li>Systemy analityki obrazu</li>
+                        </ul>
+                        <p>W przypadku niestandardowych integracji, nasz zespół techniczny może przygotować dedykowane rozwiązanie.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Jak działa wsparcie techniczne CameraInspect?</div>
+                    <div class="faq-answer">
+                        <p>Oferujemy różne poziomy wsparcia technicznego, w zależności od wybranego planu:</p>
+                        <ul>
+                            <li>Standard: wsparcie e-mail, w dni robocze 8-16</li>
+                            <li>Professional: wsparcie e-mail i telefoniczne 24/7</li>
+                            <li>Enterprise: dedykowany opiekun techniczny i priorytetowe wsparcie 24/7</li>
+                        </ul>
+                        <p>Większość problemów rozwiązywana jest zdalnie, bez konieczności wizyt serwisowych. CameraInspect posiada również system automatycznej diagnostyki, który rozwiązuje wiele problemów bez ingerencji użytkownika.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="section contact">
+        <div class="container">
+            <div class="section-heading">
+                <h2>Skontaktuj się z nami</h2>
+                <p>Masz pytania? Chcesz zamówić demonstrację? Jesteśmy gotowi pomóc!</p>
+            </div>
+            <div class="contact-container">
+                <div class="contact-info">
+                    <h3>Dane kontaktowe</h3>
+                    <div class="contact-info-item">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <h4>Email</h4>
+                            <p>info@camerainspect.com</p>
+                        </div>
+                    </div>
+                    <div class="contact-info-item">
+                        <i class="fas fa-phone-alt"></i>
+                        <div>
+                            <h4>Telefon</h4>
+                            <p>+48 22 123 45 67</p>
+                        </div>
+                    </div>
+                    <div class="contact-info-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <h4>Adres</h4>
+                            <p>ul. Przykładowa 123<br>00-000 Warszawa</p>
+                        </div>
+                    </div>
+                    <div class="contact-info-item">
+                        <i class="fas fa-clock"></i>
+                        <div>
+                            <h4>Godziny pracy</h4>
+                            <p>Poniedziałek - Piątek: 8:00 - 18:00</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="contact-form">
+                    <h3>Wyślij wiadomość</h3>
+                    <form id="contact-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="name">Imię i nazwisko</label>
+                                <input type="text" id="name" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="phone">Telefon</label>
+                                <input type="tel" id="phone" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="subject">Temat</label>
+                                <select id="subject" class="form-control">
+                                    <option value="info">Informacja ogólna</option>
+                                    <option value="demo">Zamówienie demonstracji</option>
+                                    <option value="quote">Zapytanie o wycenę</option>
+                                    <option value="support">Wsparcie techniczne</option>
+                                    <option value="other">Inne</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Wiadomość</label>
+                            <textarea id="message" class="form-control" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Wyślij wiadomość</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section id="pricing" class="section pricing">
+        <div class="container">
+            <div class="section-heading">
+                <h2>Cennik</h2>
+                <p>Wybierz plan najlepiej dopasowany do potrzeb Twojej firmy</p>
+            </div>
+            <div class="pricing-toggle">
+                <button class="active">Płatność miesięczna</button>
+                <button>Płatność roczna (-15%)</button>
+            </div>
+            <div class="pricing-cards">
+                <div class="pricing-card">
+                    <h3>Standard</h3>
+                    <div class="pricing-price">599 zł <span>/miesiąc</span></div>
+                    <ul class="pricing-features">
+                        <li>Do 10 kamer</li>
+                        <li>Podstawowa diagnostyka sieci</li>
+                        <li>Automatyczna konfiguracja</li>
+                        <li>Zdalne wsparcie</li>
+                        <li>Podstawowe raportowanie</li>
+                        <li class="na">Zaawansowana diagnostyka</li>
+                        <li class="na">Automatyczne aktualizacje</li>
+                        <li class="na">Priorytetowe wsparcie</li>
+                    </ul>
+                    <a href="#contact" class="btn btn-primary">Wybierz plan</a>
+                </div>
+                
+                <div class="pricing-card featured">
+                    <h3>Professional</h3>
+                    <div class="pricing-price">1499 zł <span>/miesiąc</span></div>
+                    <ul class="pricing-features">
+                        <li>Do 50 kamer</li>
+                        <li>Zaawansowana diagnostyka sieci</li>
+                        <li>Automatyczna konfiguracja</li>
+                        <li>Zdalne wsparcie 24/7</li>
+                        <li>Szczegółowe raportowanie</li>
+                        <li>Zaawansowana diagnostyka</li>
+                        <li>Automatyczne aktualizacje</li>
+                        <li class="na">Priorytetowe wsparcie</li>
+                    </ul>
+                    <a href="#contact" class="btn btn-primary">Wybierz plan</a>
+                </div>
+                
+                <div class="pricing-card">
+                    <h3>Enterprise</h3>
+                    <div class="pricing-price">3999 zł <span>/miesiąc</span></div>
+                    <ul class="pricing-features">
+                        <li>Nieograniczona liczba kamer</li>
+                        <li>Kompleksowa diagnostyka sieci</li>
+                        <li>Zaawansowana konfiguracja</li>
+                        <li>Dedykowane wsparcie 24/7</li>
+                        <li>Spersonalizowane raportowanie</li>
+                        <li>Zaawansowana diagnostyka</li>
+                        <li>Automatyczne aktualizacje</li>
+                        <li>Priorytetowe wsparcie</li>
+                    </ul>
+                    <a href="#contact" class="btn btn-primary">Wybierz plan</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ROI Calculator -->
+    <section id="roi-calculator" class="section roi-calculator">
+        <div class="container">
+            <div class="section-heading">
+                <h2>Kalkulator ROI</h2>
+                <p>Oblicz swoje potencjalne oszczędności dzięki CameraInspect</p>
+            </div>
+            <div class="calculator-container">
+                <form id="roi-form">
+                    <div class="calculator-form">
+                        <div>
+                            <div class="form-group">
+                                <label for="cameras">Liczba kamer</label>
+                                <input type="number" id="cameras" class="form-control" min="1" value="20">
+                            </div>
+                            <div class="form-group">
+                                <label for="locations">Liczba lokalizacji</label>
+                                <input type="number" id="locations" class="form-control" min="1" value="2">
+                            </div>
+                        </div>
+                        <div>
+                            <div class="form-group">
+                                <label for="maintenance">Miesięczne koszty utrzymania (PLN)</label>
+                                <input type="number" id="maintenance" class="form-control" min="0" value="5000">
+                            </div>
+                            <div class="form-group">
+                                <label for="issues">Średnia liczba problemów technicznych miesięcznie</label>
+                                <input type="number" id="issues" class="form-control" min="0" value="5">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <button type="button" id="calculate-roi" class="btn btn-primary">Oblicz oszczędności</button>
+                    </div>
+                </form>
+                
+                <div class="calculator-results" id="roi-results">
+                    <div class="result-item">
+                        <div class="result-label">Obecne roczne koszty:</div>
+                        <div class="result-value" id="current-costs">0 PLN</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label">Szacowane roczne koszty z CameraInspect:</div>
+                        <div class="result-value" id="new-costs">0 PLN</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label">Roczne oszczędności:</div>
+                        <div class="result-value" id="savings">0 PLN</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-label">Zmniejszenie liczby wizyt serwisowych:</div>
+                        <div class="result-value" id="reduced-visits">0%</div>
+                    </div>
+                    <div class="result-highlight">
+                        <h3>Szacowany zwrot z inwestycji (ROI)</h3>
+                        <p id="roi-months">0 miesięcy</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Case Studies -->
+    <section id="case-studies" class="section case-studies">
+        <div class="container">
+            <div class="section-heading">
+                <h2>Case Studies</h2>
+                <p>Zobacz, jak CameraInspect pomógł innym firmom</p>
+            </div>
+            <div class="case-studies-container">
+                <div class="case-study">
+                    <h3>Sieć Sklepów Spożywczych</h3>
+                    <div class="case-study-section">
+                        <h4>Wyzwanie:</h4>
+                        <ul class="case-study-list">
+                            <li>50 lokalizacji</li>
+                            <li>Przestarzały system monitoringu</li>
+                            <li>Brak specjalistów IT w każdej lokalizacji</li>
+                            <li>Wysokie koszty serwisu</li>
+                        </ul>
+                    </div>
+                    <div class="case-study-section">
+                        <h4>Rozwiązanie:</h4>
+                        <ul class="case-study-list">
+                            <li>Wdrożenie CameraInspect Professional</li>
+                            <li>Zdalna konfiguracja wszystkich systemów</li>
+                            <li>Automatyczna diagnostyka i monitoring</li>
+                        </ul>
+                    </div>
+                    <div class="case-study-section">
+                        <h4>Rezultaty:</h4>
+                        <ul class="case-study-list">
+                            <li>Redukcja kosztów serwisu o 45%</li>
+                            <li>Czas wdrożenia skrócony z 6 do 2 miesięcy</li>
+                            <li>ROI osiągnięte po 4 miesiącach</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="case-study">
+                    <h3>Hotel</h3>
+                    <div class="case-study-section">
+                        <h4>Wyzwanie:</h4>
+                        <ul class="case-study-list">
+                            <li>200 kamer w obiekcie</li>
+                            <li>Częste problemy z siecią</li>
+                            <li>Brak dokumentacji technicznej</li>
+                            <li>Wysokie koszty utrzymania</li>
+                        </ul>
+                    </div>
+                    <div class="case-study-section">
+                        <h4>Rozwiązanie:</h4>
+                        <ul class="case-study-list">
+                            <li>Wdrożenie CameraInspect Enterprise</li>
+                            <li>Pełna inwentaryzacja systemu</li>
+                            <li>Automatyczna optymalizacja sieci</li>
+                        </ul>
+                    </div>
+                    <div class="case-study-section">
+                        <h4>Rezultaty:</h4>
+                        <ul class="case-study-list">
+                            <li>70% mniej incydentów technicznych</li>
+                            <li>Oszczędność 15,000 PLN miesięcznie</li>
+                            <li>Zwiększenie niezawodności do 99.9%</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="case-study">
+                    <h3>Firma Logistyczna</h3>
+                    <div class="case-study-section">
+                        <h4>Wyzwanie:</h4>
+                        <ul class="case-study-list">
+                            <li>20 magazynów</li>
+                            <li>Różne systemy kamer</li>
+                            <li>Problemy z integracją</li>
+                            <li>Brak centralnego zarządzania</li>
+                        </ul>
+                    </div>
+                    <div class="case-study-section">
+                        <h4>Rozwiązanie:</h4>
+                        <ul class="case-study-list">
+                            <li>Wdrożenie CameraInspect Enterprise</li>
+                            <li>Unifikacja systemów</li>
+                            <li>Centralne zarządzanie</li>
+                        </ul>
+                    </div>
+                    <div class="case-study-section">
+                        <h4>Rezultaty:</h4>
+                        <ul class="case-study-list">
+                            <li>Redukcja kosztów IT o 35%</li>
+                            <li>Czas reakcji skrócony o 80%</li>
+                            <li>Pełna integracja wszystkich systemów</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features" class="section features">
+        <div class="container">
+            <div class="section-heading">
+                <h2>Kluczowe Funkcjonalności</h2>
+                <p>CameraInspect zapewnia kompleksowe rozwiązania dla efektywnego zarządzania systemami monitoringu</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-network-wired"></i>
+                    </div>
+                    <h3>Automatyczna Diagnostyka Sieci</h3>
+                    <p>Kompleksowa analiza infrastruktury sieciowej wykrywa potencjalne problemy przed instalacją, optymalizuje ustawienia oraz testuje przepustowość i stabilność połączenia.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-magic"></i>
+                    </div>
+                    <h3>Inteligentny Kreator Konfiguracji</h3>
+                    <p>Prowadzi krok po kroku przez proces instalacji, automatycznie wykrywa urządzenia w sieci, konfiguruje WiFi i połączenia przewodowe dla najlepszej wydajności.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Zaawansowana Diagnostyka</h3>
+                    <p>Monitoruje wydajność systemu w czasie rzeczywistym, automatycznie testuje połączenia z kamerami, sprawdza dostępność portów i usług, oraz wykrywa konflikty sieciowe.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <h3>Raportowanie i Dokumentacja</h3>
+                    <p>Generuje szczegółowe raporty techniczne, dokumentację konfiguracji systemu, historię zmian i modyfikacji, z możliwością eksportu danych do różnych formatów.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How it works -->
+    <section id="how-it-works" class="section how-it-works">
+        <div class="container">
+            <div class="section-heading">
+                <h2>Jak to działa</h2>
+                <p>Proces wdrożenia CameraInspect jest prosty i efektywny</p>
+            </div>
+            <div class="how-it-works-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Diagnostyka sieci</h3>
+                    <p>System automatycznie analizuje Twoją infrastrukturę sieciową, wykrywa potencjalne problemy i sugeruje optymalne rozwiązania.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Automatyczna konfiguracja</h3>
+                    <p>Inteligentny kreator prowadzi przez proces konfiguracji kamer, automatycznie wykrywa urządzenia i optymalizuje ustawienia.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Monitoring i optymalizacja</h3>
+                    <p>System na bieżąco monitoruje wydajność, przeprowadza regularne testy oraz automatycznie optymalizuje parametry dla zapewnienia najwyższej jakości.</p>
+                </div>
+            </div>
+            <div class="text-center">
+                <a href="#contact" class="btn btn-primary">Rozpocznij już dziś</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits -->
+    <section id="benefits" class="section benefits">
+        <div class="container">
+            <div class="section-heading">
+                <h2>Korzyści Biznesowe</h2>
+                <p>CameraInspect zapewnia wymierne rezultaty dla Twojego biznesu</p>
+            </div>
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <div class="benefit-stats">60%</div>
+                    <h3><i class="fas fa-tachometer-alt"></i> Krótszy czas wdrożenia</h3>
+                    <p>Dzięki automatyzacji procesów instalacji i konfiguracji, CameraInspect znacząco skraca czas potrzebny na wdrożenie systemów monitoringu, pozwalając na szybsze uruchomienie.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-stats">40%</div>
+                    <h3><i class="fas fa-tools"></i> Mniej wizyt serwisowych</h3>
+                    <p>System automatycznie wykrywa i rozwiązuje problemy, zanim staną się one poważne, co znacząco redukuje potrzebę fizycznych interwencji technicznych.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-stats">30%</div>
+                    <h3><i class="fas fa-coins"></i> Niższe koszty utrzymania</h3>
+                    <p>Zautomatyzowana diagnostyka i optymalizacja systemu zmniejsza koszty operacyjne związane z utrzymaniem infrastruktury monitoringu.</p>
+                </div>
